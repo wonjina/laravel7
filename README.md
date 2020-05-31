@@ -46,8 +46,10 @@ PDF 파일 형식으로 생성한다.
 로그인한 사람만 작성 가능하다. or 비로그인 사용자는 작성할 수 없다.
 
 
-##Rest Api
-- Oauth
+## Rest Api  
+
+- Oauth  
+
 |기능|Method|URI|
 |:---|:---:|:---:|
 |로그인|POST|/login|
@@ -57,7 +59,8 @@ PDF 파일 형식으로 생성한다.
 |인증 유저 정보|Get|/user|  
   
   
-- QnA board
+- QnA board  
+
 |기능|Method|URI|
 |:---|:---:|:---:|
 |질문글 작성|POST|/boards/{boardId}/answer|
