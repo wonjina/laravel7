@@ -21,22 +21,6 @@ class BoardService
         return 'Board update...';
     }
     
-    public function show($id)
-    {
-        //$board = Board::where('id', $id)->get();
-        $board = Board::findOrFail($id);    //없으면 404
-        if($board->private == 1) //비공개라면
-        {
-            $user = Auth::user();
-            if($user->email != $board->email) 
-            {
-                return response('failed permission', 401);
-            }
-        }
-
-        return $board;
-    }
-
     public function destroy($id)
     {
         $permission = Auth::user()->roles->pluck('name')->first();        

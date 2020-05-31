@@ -12,8 +12,6 @@ use App\Models\User;
 
 class QnABoardService
 {
-    private $test = 'QnA->';
-    
     public function index($boardId)
     {
         //add validate check 
@@ -24,13 +22,14 @@ class QnABoardService
     {
         return 'QnA update...';
     }
-    
+    /*
     public function show($boardId, $id)
     {
+        $permission = Auth::user()->roles->pluck('name')->first();
         $board = Board::findOrFail($boardId);    //없으면 404
         if($board->private == 1) //비공개라면
         {
-            if(Auth::user()->email != $board->email) 
+            if($permission != 'admin' && Auth::user()->email != $board->email) 
             {
                 return response('failed permission', 401);
             }
@@ -42,7 +41,7 @@ class QnABoardService
                         ['board_id', $boardId]
                     ])->get();
     }
-
+*/
     public function destroy($boardId, $id)
     {
         return QnA::destroy($id);
