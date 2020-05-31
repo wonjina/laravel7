@@ -56,7 +56,7 @@ PDF 파일 형식으로 생성한다.
 |로그아웃|POST|/logout|
 |회원가입|POST|/register|
 |비밀번호 수정|PATCH|/users/{id}|
-|인증 유저 정보|Get|/user|  
+|내 정보|Get|/user|  
   
   
 - QnA board  
