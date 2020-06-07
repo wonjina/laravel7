@@ -28,11 +28,18 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::post('/login', function (Request $request) {
     //Log::info('Showing user profile for user: '.$request);
     auth()->attempt($request->only(['email', 'password']));
-    return response()->json([
-        'auth_user'=>auth()->user()
-    ], 200);
+    if(auth()->user() !== null)
+    {
+        return response()->json([
+            'auth_user'=>auth()->user()
+        ], 200);
+    } else {
+        return response()->json('failed login', 400);
+    }
+    
 });
 
+Route::post('/register', 'Auth\RegisterController@register');
 Route::get('/permission-denied', function () {
     return 'permission-denied';
 });

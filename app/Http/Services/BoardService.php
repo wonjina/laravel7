@@ -23,14 +23,16 @@ class BoardService
     
     public function destroy($id)
     {
-        $permission = Auth::user()->roles->pluck('name')->first();        
+        return Board::where('id', $id)->where('email',Auth::user()->email)->delete();
+        /*
         $board = Board::findOrFail($id);    //없으면 404
 
-        if($permission == 'admin' || Auth::user()->email == $board->email)  //작성자 이거나 관리자일 경우 삭제
+        if(Auth::user()->is_amin || Auth::user()->email == $board->email)  //작성자 이거나 관리자일 경우 삭제
         {
             return Board::destroy($id);
         }
         return response('failed permission', 401);
+        */
     }
 
     public function store(array $param)

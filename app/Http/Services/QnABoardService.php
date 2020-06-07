@@ -14,7 +14,10 @@ class QnABoardService
 {
     public function index($boardId)
     {
-        //add validate check 
+        if(!$this->checkPermission($boardId))
+        {
+            return response('failed permission', 401);
+        }
         return Board::with('qna')->where('id', $boardId)->get();
     }
         
@@ -22,26 +25,16 @@ class QnABoardService
     {
         return 'QnA update...';
     }
-    /*
+
     public function show($boardId, $id)
     {
-        $permission = Auth::user()->roles->pluck('name')->first();
-        $board = Board::findOrFail($boardId);    //없으면 404
-        if($board->private == 1) //비공개라면
+        if(!$this->checkPermission($boardId))
         {
-            if($permission != 'admin' && Auth::user()->email != $board->email) 
-            {
-                return response('failed permission', 401);
-            }
+            return response('failed permission', 401);
         }
-
-        return QnA::with('board')
-                    ->where([
-                        ['id', $id],
-                        ['board_id', $boardId]
-                    ])->get();
+        return QnA::where('id', $id)->get();
     }
-*/
+
     public function destroy($boardId, $id)
     {
         return QnA::destroy($id);
@@ -49,9 +42,22 @@ class QnABoardService
 
     public function store(array $param, $boardId)
     {
-        $user = Auth::user();
         $qa = new QnA;
-        $qa->init($param, $user);
+        $qa->init($param, Auth::user());
         return $qa->save();
+    }
+
+    private function checkPermission($boardId)
+    {
+        $board = Board::findOrFail($boardId);    //없으면 404
+        if($board->private) //비공개라면
+        {
+            if(!Auth::user()->is_admin) {Log::debug('message  '.Auth::user()->email .'---'. $board->email);}
+            if(!Auth::user()->is_admin && Auth::user()->email != $board->email) 
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }
