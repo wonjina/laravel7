@@ -55,7 +55,7 @@ Route::get('boards/{boardId}/answer', 'QnABoardController@index');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::resource('boards','BoardController')->except('index');
-    Route::resource('boards/{boardId}/answer', 'QnABoardController')->except('index', 'store', 'destroy');
+    Route::resource('boards/{boardId}/answer', 'QnABoardController')->except('index', 'store', 'destroy', 'show');
 
     Route::middleware('admin')->group(function () {
         Route::post('boards/{boardId}/answer', 'QnABoardController@store');

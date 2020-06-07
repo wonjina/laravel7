@@ -14,25 +14,12 @@ class QnABoardService
 {
     public function index($boardId)
     {
-        if(!$this->checkPermission($boardId))
+        $board = Board::with('qna')->findOrFail($boardId);
+        if(!$this->checkPermission($board))
         {
             return response('failed permission', 401);
         }
-        return Board::with('qna')->where('id', $boardId)->get();
-    }
-        
-    public function update(array $board)
-    {
-        return 'QnA update...';
-    }
-
-    public function show($boardId, $id)
-    {
-        if(!$this->checkPermission($boardId))
-        {
-            return response('failed permission', 401);
-        }
-        return QnA::where('id', $id)->get();
+        return $board->qna;
     }
 
     public function destroy($boardId, $id)
@@ -47,12 +34,10 @@ class QnABoardService
         return $qa->save();
     }
 
-    private function checkPermission($boardId)
+    private function checkPermission($board)
     {
-        $board = Board::findOrFail($boardId);    //없으면 404
         if($board->private) //비공개라면
         {
-            if(!Auth::user()->is_admin) {Log::debug('message  '.Auth::user()->email .'---'. $board->email);}
             if(!Auth::user()->is_admin && Auth::user()->email != $board->email) 
             {
                 return false;

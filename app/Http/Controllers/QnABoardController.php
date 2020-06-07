@@ -19,7 +19,6 @@ class QnABoardController extends Controller
     {
         $validatedData = $req->validate([
             'content' => 'required|string',
-            'board_id' => 'required|integer',
         ]);
         return $board->store($req->all(), $boardId);
     }
@@ -31,14 +30,8 @@ class QnABoardController extends Controller
     }
 
     //삭제
-    public function destroy(QnABoardService $board, $boardId, $id)
+    public function destroy(QnABoardService $board, $boardId)
     {
-        return $board->destroy($boardId, $id);
-    }
-
-    //질문에 대한 답변($id)
-    public function show(QnABoardService $board, $boardId, $id)
-    {
-        return $board->show($boardId, $id);
+        return $board->destroy($boardId);
     }
 }
