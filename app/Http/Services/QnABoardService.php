@@ -14,34 +14,14 @@ class QnABoardService
 {
     public function index($boardId)
     {
-        //add validate check 
-        return Board::with('qna')->where('id', $boardId)->get();
-    }
-        
-    public function update(array $board)
-    {
-        return 'QnA update...';
-    }
-    /*
-    public function show($boardId, $id)
-    {
-        $permission = Auth::user()->roles->pluck('name')->first();
-        $board = Board::findOrFail($boardId);    //없으면 404
-        if($board->private == 1) //비공개라면
+        $board = Board::with('qna')->findOrFail($boardId);
+        if(!$this->checkPermission($board))
         {
-            if($permission != 'admin' && Auth::user()->email != $board->email) 
-            {
-                return response('failed permission', 401);
-            }
+            return response('failed permission', 401);
         }
-
-        return QnA::with('board')
-                    ->where([
-                        ['id', $id],
-                        ['board_id', $boardId]
-                    ])->get();
+        return $board->qna;
     }
-*/
+
     public function destroy($boardId, $id)
     {
         return QnA::destroy($id);
@@ -49,9 +29,20 @@ class QnABoardService
 
     public function store(array $param, $boardId)
     {
-        $user = Auth::user();
         $qa = new QnA;
-        $qa->init($param, $user);
+        $qa->init($param, Auth::user());
         return $qa->save();
+    }
+
+    private function checkPermission($board)
+    {
+        if($board->private) //비공개라면
+        {
+            if(!Auth::user()->is_admin && Auth::user()->email != $board->email) 
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }

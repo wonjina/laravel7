@@ -11,28 +11,15 @@ use App\Models\QnA;
 
 class BoardController extends Controller
 {
-    
-    function __construct(Request $req)
-    {
-        /*
-        Log::info('BoardController: __construct: '.$req->query('type'));
-        if($req->query('type')=='pdf') {
-            app()->bind(BoardServiceInterface::class, BoardService::class);
-        } else {
-            app()->bind(BoardServiceInterface::class, QnABoardService::class);
-        }
-        */
-    }
-
     //조회
     public function index(BoardService $board, Request $req) 
     {
         return $board->index($req->query('type'));
     }
 
-    public function show(BoardService $board, $id) 
+    public function show(BoardService $board, $boardId) 
     {
-        return $board->show($id);
+        return $board->show($boardId);
     }
 
     //쓰기

@@ -15,22 +15,24 @@ class BoardService
     {
         return Board::where('type', $type)->get();
     }
-        
-    public function update(array $board)
-    {
-        return 'Board update...';
-    }
     
     public function destroy($id)
     {
-        $permission = Auth::user()->roles->pluck('name')->first();        
-        $board = Board::findOrFail($id);    //없으면 404
-
-        if($permission == 'admin' || Auth::user()->email == $board->email)  //작성자 이거나 관리자일 경우 삭제
-        {
+        if(Auth::user()->is_admin) {
             return Board::destroy($id);
+        } else {
+            return Board::where('id', $id)->where('email',Auth::user()->email)->delete();
         }
-        return response('failed permission', 401);
+    }
+
+    public function show($boardId)
+    {
+        $board = Board::with('qna')->findOrFail($boardId);
+        if(!$this->checkPermission($board))
+        {
+            return response('failed permission', 401);
+        }
+        return $board;
     }
 
     public function store(array $param)
@@ -41,4 +43,15 @@ class BoardService
         return $board->save();
     }
 
+    private function checkPermission($board)
+    {
+        if($board->private) //비공개라면
+        {
+            if(!Auth::user()->is_admin && Auth::user()->email != $board->email) 
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 }
