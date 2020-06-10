@@ -8,18 +8,22 @@ use App\Http\Services\QnABoardService;
 use App\Http\Services\pdfBoardService;
 use Illuminate\Support\Facades\Log;
 use App\Models\QnA;
+use App\Http\Resources\Board as BoardResource;
 
 class BoardController extends Controller
 {
     //조회
     public function index(BoardService $board, Request $req) 
     {
-        return $board->index($req->query('type'));
+        $validatedData = $req->validate([
+            'page_size' => 'integer|min:1',
+        ]);
+        return BoardResource::collection($board->index($req->query('type'), $req->all()));
     }
 
     public function show(BoardService $board, $boardId) 
     {
-        return $board->show($boardId);
+        return new BoardResource($board->show($boardId));
     }
 
     //쓰기
@@ -31,7 +35,12 @@ class BoardController extends Controller
             'type' => 'bail|required|string',
             'private' => 'bail|required|boolean',
         ]);
-        return $board->store($req->all());
+        /*
+throw ValidationException::withMessages([
+            'email' => ['The provided credentials are incorrect.'],
+        ]);
+        */
+        return new BoardResource($board->store($req->all()));
     }
 
     //수정

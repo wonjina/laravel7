@@ -7,13 +7,20 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Common\Helper\Constants\PagenateConstants;
 
 class BoardService
 {
     //boards
-    public function index($type)
+    public function index($type, array $param)
     {
-        return Board::where('type', $type)->get();
+        $boards = Board::where('type', $type)
+                        ->orderBy('created_at', 'desc')
+                        ->paginate(is_null($param[PagenateConstants::PAGE_SIZE_COLUMN_NAME]) ? 
+                                                                    PagenateConstants::PAGE_SIZE : 
+                                                                    $param[PagenateConstants::PAGE_SIZE_COLUMN_NAME]);
+        $boards->withQueryString()->links();
+        return $boards;
     }
     
     public function destroy($id)

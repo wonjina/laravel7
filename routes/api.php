@@ -62,21 +62,3 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('boards/{boardId}/answer/{id}', 'QnABoardController@destroy');
     });
 });
-
-/*
-Route::prefix('boards')->middleware('auth:sanctum')->group(function () {   
-    Route::resource('{type}', 'BoardController')->except(['index']);
-    Route::get('{type}/{id}', 'QnABoardController@index');
-    Route::resource('{type}/{id}', 'QnABoardController')->except(['index'])->middleware('admin');
-});
-*/
-
-/*
-Route::prefix('boards')->group(function () {
-    Route::get('{type}','BoardController@index');
-    Route::resource('{type}', 'BoardController')->except(['index'])->middleware('auth:sanctum');
-    
-    Route::get('{type}/{id}', 'QnABoardController@index')->middleware('auth:sanctum');;
-    Route::resource('{type}/{id}', 'QnABoardController')->except(['index'])->middleware(['auth:sanctum', 'admin']);
-});
-*/

@@ -20,6 +20,8 @@ class CreateBoardsTable extends Migration
             $table->string('type');
             $table->string('email');
             $table->string('writer');
+            $table->boolean('private')->default(false);
+            $table->boolean('is_boardable')->default(false);
             $table->timestamps();
         });
     }
