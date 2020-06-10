@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateQnASTable extends Migration
+class CreatePdfsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateQnASTable extends Migration
      */
     public function up()
     {
-        Schema::create('qn_a_s', function (Blueprint $table) {
+        Schema::create('pdfs', function (Blueprint $table) {
             $table->id();
-            $table->string('content');
-            $table->string('respondent');
-            $table->bigInteger('board_id')->unsigned()->index();
-            $table->foreign('board_id')->references('id')->on('boards')->onCascade('delete');
+            $table->string('file_name');
+            $table->string('description');
+            $table->bigInteger('service_id')->unsigned();
+            $table->foreign('service_id')->references('id')->on('pdf_services')->onCascade('delete');
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class CreateQnASTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('qn_a_s');
+        Schema::dropIfExists('pdfs');
     }
 }
