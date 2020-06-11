@@ -16,7 +16,7 @@ class QnA extends JsonResource
     {
         return [
             'content' => $this->content,
-            'respondent' => $this->writer.'('.$this->email.')',
+            'respondent' => $this->respondent,
             'created_date' => $this->created_at,
         ];
     }
