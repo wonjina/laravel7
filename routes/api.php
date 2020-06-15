@@ -50,15 +50,31 @@ Route::get('/permission-denied', function () {
  * Boards route
  */
 
-Route::get('boards', 'BoardController@index');
-Route::get('boards/{boardId}/answer', 'QnABoardController@index');
+Route::get('boards', 'Board/BoardController@index');
+Route::get('boards/{boardId}/answer', 'Board/QnABoardController@index');
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::resource('boards','BoardController')->except('index');
-    Route::resource('boards/{boardId}/answer', 'QnABoardController')->except('index', 'store', 'destroy', 'show');
+    Route::resource('boards','Board/BoardController')->except('index');
+    Route::resource('boards/{boardId}/answer', 'Board/QnABoardController')->except('index', 'store', 'destroy', 'show');
 
     Route::middleware('admin')->group(function () {
-        Route::post('boards/{boardId}/answer', 'QnABoardController@store');
-        Route::delete('boards/{boardId}/answer/{id}', 'QnABoardController@destroy');
+        Route::post('boards/{boardId}/answer', 'Board/QnABoardController@store');
+        Route::delete('boards/{boardId}/answer/{id}', 'Board/QnABoardController@destroy');
     });
 });
+
+
+/**
+ * Pdf controller
+ */
+
+ // user
+ Route::resource('/pdfs', 'Pdf/User/PdfController')->except('index'); //test용
+ Route::resource('/users/{id}/services', 'Pdf/User/UserServiceController')->only('index', 'show', 'destroy')->middleware('auth:sanctum');
+ Route::resource('/users/{id}/services/{serviceId}/pdfs', 'Pdf/User/UserPdfController')->only('update', 'show')->middleware('auth:sanctum');
+ 
+ //admin
+ Route::resource('/services', 'Pdf\Admin\ServiceController');
+ Route::resource('/services/{id}/pdfs', 'Pdf\Admin\ServicePdfController');
+ Route::resource('/services/{id}/users', 'Pdf\Admin\ServiceUserController');
+ Route::resource('/services/{id}/users/{userId}/pdfs', 'Pdf\Admin\ServiceUserPdfController');
