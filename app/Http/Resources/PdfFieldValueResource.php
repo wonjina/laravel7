@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class QnA extends JsonResource
+class PdfFieldValueResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,9 +15,10 @@ class QnA extends JsonResource
     public function toArray($request)
     {
         return [
-            'content' => $this->content,
-            'respondent' => $this->respondent,
-            'created_date' => $this->created_at,
+            'value_number' => $this->id,
+            'value' => $this->name,
+            'value_created_at' => $this->created_at,
+            'value_updated_at' => $this->updated_at,
         ];
     }
 }

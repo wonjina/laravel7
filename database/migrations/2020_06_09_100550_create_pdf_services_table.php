@@ -16,6 +16,7 @@ class CreatePdfServicesTable extends Migration
         Schema::create('pdf_services', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('description');
             $table->integer('depth')->unsigned();
             $table->bigInteger('parents_id')->unsigned();
             $table->foreign('parents_id')->references('id')->on('pdf_services')->onCascade('delete');

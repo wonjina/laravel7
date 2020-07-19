@@ -25,10 +25,11 @@ class BoardService
     
     public function destroy($id)
     {
-        if(Auth::user()->is_admin) {
-            return Board::destroy($id);
+        $board = Board::find($id);
+        if(!$this->checkPermission($board)) {
+            return response('failed permission', 401);
         } else {
-            return Board::where('id', $id)->where('email',Auth::user()->email)->delete();
+            return Board::destroy($board->id);
         }
     }
 

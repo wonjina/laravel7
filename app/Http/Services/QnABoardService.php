@@ -19,16 +19,21 @@ class QnABoardService
         {
             return response('failed permission', 401);
         }
-        return $board->qna;
+        return $board;
     }
 
-    public function destroy($boardId, $id)
+    public function destroy($boardId, $qnaId)
     {
-        return QnA::destroy($id);
+        QnA::findOrFail($qnaId);
+        return QnA::destroy($qnaId);
     }
 
     public function store(array $param, $boardId)
     {
+        if(QnA::where('board_id', $boardId)->first())
+        {
+            return response('Already exist a answer', 400);
+        }
         $qa = new QnA;
         $qa->init($param, Auth::user());
         return $qa->save();

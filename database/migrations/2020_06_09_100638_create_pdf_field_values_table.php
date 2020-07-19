@@ -13,13 +13,15 @@ class CreatePdfFieldValuesTable extends Migration
      */
     public function up()
     {
-        Schema::create('p0df_field_values', function (Blueprint $table) {
+        Schema::create('pdf_field_values', function (Blueprint $table) {
             $table->id();
             $table->string('value');
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onCascade('delete');
             $table->bigInteger('field_id')->unsigned();
             $table->foreign('field_id')->references('id')->on('pdf_fields')->onCascade('delete');
+            $table->bigInteger('pdf_id')->unsigned();
+            $table->foreign('pdf_id')->references('id')->on('pdfs');
             $table->timestamps();
         });
     }

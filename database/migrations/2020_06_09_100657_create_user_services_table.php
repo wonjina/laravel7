@@ -15,6 +15,7 @@ class CreateUserServicesTable extends Migration
     {
         Schema::create('user_services', function (Blueprint $table) {
             $table->id();
+            $table->boolean('write_permisstion')->default(false);
             $table->bigInteger('pdf_service_id')->unsigned();
             $table->foreign('pdf_service_id')->references('id')->on('pdf_services')->onCascade('delete');
             $table->bigInteger('user_id')->unsigned();

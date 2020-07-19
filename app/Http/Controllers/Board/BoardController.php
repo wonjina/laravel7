@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Board;
 
 use Illuminate\Http\Request;
 use App\Http\Services\BoardService;
@@ -16,7 +16,7 @@ class BoardController extends Controller
     public function index(BoardService $board, Request $req) 
     {
         $validatedData = $req->validate([
-            'page_size' => 'integer|min:1',
+            'page_size' => 'required|integer|min:1',
         ]);
         return BoardResource::collection($board->index($req->query('type'), $req->all()));
     }
@@ -40,7 +40,7 @@ throw ValidationException::withMessages([
             'email' => ['The provided credentials are incorrect.'],
         ]);
         */
-        return new BoardResource($board->store($req->all()));
+        return $board->store($req->all());
     }
 
     //수정

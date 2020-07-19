@@ -39,8 +39,13 @@ class User extends Authenticatable
     ];
 
     
-    public function roles()
+    public function pdfFieldValues()
     {
-        return $this->belongsToMany('App\Models\Role');
+        return $this->hasMany('App\Models\PdfModel\PdfFieldValue');
+    }
+    
+    public function pdfServices()
+    {
+        return $this->hasMany('App\Models\ServiceModel\PdfService');
     }
 }
